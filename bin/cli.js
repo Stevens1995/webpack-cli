@@ -205,10 +205,13 @@ For more information, see https://webpack.js.org/api/cli/.`);
 		}
 	});
 
+	// TODO: 为什么会导致输出的帮助文档缩短？
 	// yargs will terminate the process early when the user uses help or version.
 	// This causes large help outputs to be cut short (https://github.com/nodejs/node/wiki/API-changes-between-v0.10-and-v4#process).
 	// To prevent this we use the yargs.parse API and exit the process normally
 	yargs.parse(process.argv.slice(2), (err, argv, output) => {
+
+		// Error 是 node内置的异常模块，设置stackTraceLimit属性是指定堆栈跟踪的数量，默认是10
 		Error.stackTraceLimit = 30;
 
 		// arguments validation failed
