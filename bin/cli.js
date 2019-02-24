@@ -10,7 +10,7 @@
 
 	const importLocal = require("import-local");
 	// Prefer the local installation of webpack-cli
-	if (importLocal(__filename)) {  
+	if (importLocal(__filename)) {
 		// 使用本地版本的webpack-cli包，import-local包里的具体做法是先找到项目下执行文件的名称，这里是webpack-cli/bin/cli.js
 		// 然后使用process.cwd得到当前的进程路径，两者结合后看看本地有没有这个文件。
 		return;
@@ -31,11 +31,10 @@
 		"info"
 	];
 
-// process.argv 返回启动node进程时的命令行参数，第一个是启动node进程的可执行文件路径，第二个是正在执行的文件路径，后面是传入的参数
+	// process.argv 返回启动node进程时的命令行参数，第一个是启动node进程的可执行文件路径，第二个是正在执行的文件路径，后面是传入的参数
 	// js Array.prototype.find方法，返回第一个匹配callback的参数，否则返回undefined
 	const NON_COMPILATION_CMD = process.argv.find(arg => {
 		if (arg === "serve") {
-			
 			// global是node中的顶级作用域（不是全局作用域），在浏览器中，顶级作用于等于全局作用域
 			global.process.argv = global.process.argv.filter(a => a !== "serve");
 			process.argv = global.process.argv;
