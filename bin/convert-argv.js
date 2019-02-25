@@ -41,6 +41,8 @@ module.exports = function(...args) {
 
 	let configFileLoaded = false;
 	let configFiles = [];
+
+	// 一堆文件扩展名
 	const extensions = Object.keys(interpret.extensions).sort(function(a, b) {
 		return a === ".js" ? -1 : b === ".js" ? 1 : a.length - b.length;
 	});
@@ -69,10 +71,12 @@ module.exports = function(...args) {
 		const configArgList = Array.isArray(argv.config) ? argv.config : [argv.config];
 		configFiles = configArgList.map(mapConfigArg);
 	} else {
+		// argv里面没有通过config指定文件时，使用默认的配置文件。
 		const defaultConfigFileNames = ["webpack.config", "webpackfile"].join("|");
 		const webpackConfigFileRegExp = `(${defaultConfigFileNames})(${extensions.join("|")})`;
 		const pathToWebpackConfig = findup(webpackConfigFileRegExp);
-
+		
+		// 如果pathToWebpackConfig存在，说明找到了用户添加的配置文件。
 		if (pathToWebpackConfig) {
 			const resolvedPath = path.resolve(pathToWebpackConfig);
 			const actualConfigFileName = path.basename(resolvedPath);
