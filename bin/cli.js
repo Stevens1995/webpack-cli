@@ -233,6 +233,7 @@ For more information, see https://webpack.js.org/api/cli/.`);
 
 		let options;
 		try {
+			// 到这里的一切还是根据命令行中传入的参数，对argv进行解析
 			options = require("./convert-argv")(argv);
 		} catch (err) {
 			if (err.name !== "ValidationError") {

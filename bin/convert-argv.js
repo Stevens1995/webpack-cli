@@ -4,6 +4,9 @@ fs.existsSync = fs.existsSync || path.existsSync;
 const interpret = require("interpret");
 const prepareOptions = require("./prepareOptions");
 const webpackConfigurationSchema = require("./webpackConfigurationSchema.json");
+// 有个疑问，require时，比如这里require("webpack")，在node_modules/下面的webpack文件夹中，并没有index.js或者webpack.js，那么
+// require的时哪个文件?
+// 初步猜测：package.json里面的main字段指定的文件(已验证...应该跟猜测的一样...)
 const validateSchema = require("webpack").validateSchema;
 const WebpackOptionsValidationError = require("webpack").WebpackOptionsValidationError;
 const findup = require("findup-sync");
@@ -130,7 +133,7 @@ module.exports = function(...args) {
 		configFileLoaded = true;
 	}
 
-	if (!configFileLoaded) {
+	if (!configFileLoaded) { // 说明用户项目中没有webpack的配置文件(比如webpack.config.js)
 		return processConfiguredOptions({});
 	} else if (options.length === 1) {
 		return processConfiguredOptions(options[0]);
@@ -139,6 +142,7 @@ module.exports = function(...args) {
 	}
 
 	function processConfiguredOptions(options) {
+		// validateSchema用来检查json的合法性，这里是检查options，简单情况下，不出现错误，返回一个空数组。
 		const webpackConfigurationValidationErrors = validateSchema(webpackConfigurationSchema, options);
 		if (webpackConfigurationValidationErrors.length) {
 			const error = new WebpackOptionsValidationError(webpackConfigurationValidationErrors);
