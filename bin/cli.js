@@ -286,6 +286,7 @@ For more information, see https://webpack.js.org/api/cli/.`);
 			const firstOptions = [].concat(options)[0];
 			const statsPresetToOptions = require("webpack").Stats.presetToOptions;
 
+			// outputOptions是输出相关的一些信息，可以由用户通过 --display选项来设置
 			let outputOptions = options.stats;
 			if (typeof outputOptions === "boolean" || typeof outputOptions === "string") {
 				outputOptions = statsPresetToOptions(outputOptions);
@@ -293,6 +294,8 @@ For more information, see https://webpack.js.org/api/cli/.`);
 				outputOptions = {};
 			}
 
+			// 控制webpack-cli 的输出信息，比如设置--display error-only，只会打印错误信息。
+			// 其他选项还有 "minimal" "none" "normal" "verbose"
 			ifArg("display", function(preset) {
 				outputOptions = statsPresetToOptions(preset);
 			});
@@ -414,11 +417,15 @@ For more information, see https://webpack.js.org/api/cli/.`);
 				outputOptions.buildDelimiter = value;
 			});
 
+			// 直到这里，上面的那些ifArg全是设置outputOptions，控制台输出信息相关的配置
+
 			const webpack = require("webpack");
 
 			let lastHash = null;
 			let compiler;
 			try {
+				// 这个complier，webpack用了一个开源库，Tapable（集成自这个库），后面需要看下这个库是干啥的
+				// 还要webpack-cli 本身也用了yargs这个开源库，yargs用来帮助开发cli工具
 				compiler = webpack(options);
 			} catch (err) {
 				if (err.name === "WebpackOptionsValidationError") {
