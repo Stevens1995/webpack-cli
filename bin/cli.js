@@ -494,6 +494,7 @@ For more information, see https://webpack.js.org/api/cli/.`);
 					process.exitCode = 2;
 				}
 			}
+			// firstOptions 和 options 有啥区别啊...我感觉是一样的，后面可以看下
 			if (firstOptions.watch || options.watch) {
 				const watchOptions = firstOptions.watchOptions || firstOptions.watch || options.watch || {};
 				if (watchOptions.stdin) {
